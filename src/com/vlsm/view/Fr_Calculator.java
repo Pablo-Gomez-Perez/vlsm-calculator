@@ -245,13 +245,41 @@ public class Fr_Calculator extends JFrame {
 		});
 		btn_ClearAll.setBackground(new Color(250, 128, 114));
 		panelSouth_buttons.add(btn_ClearAll);
+		
+		
+		this.btn_Calculate.setEnabled(false);
+		this.btn_ShowFullData.setEnabled(false);
+		
+	}
+	
+	private boolean validateFields() {
+		
+		if(this.txf_ipBaseAddress.getText().isBlank())
+			return true;
+		
+		if(this.txf_netPrefix.getText().isBlank())
+			return true;
+		
+		if(this.txf_SubnetsRequired.getText().isBlank())
+			return true;
+		
+		return false;
 	}
 	
 	private void prepareHostTable() {
 		
+		
+		if(validateFields())
+			return;
+		
 		int req;
 		
 		try {
+			
+			this.tableDataHostModel.getDataVector().removeAllElements();
+			this.tableDataHostRequired.updateUI();
+			this.btn_Calculate.setEnabled(true);
+			
 			req = Integer.parseInt(this.txf_SubnetsRequired.getText());
 			AppContext.hostController.prepareVlans(req).stream().forEach(o -> {
 				this.tableDataHostModel.addRow(o);
@@ -270,6 +298,8 @@ public class Fr_Calculator extends JFrame {
 		this.txf_netPrefix.setText("");
 		this.txf_SubnetsRequired.setText("");
 		this.txa_VLSMSchema.setText("");
+		this.btn_Calculate.setEnabled(false);
+		this.btn_ShowFullData.setEnabled(false);
 		
 	}
 	
