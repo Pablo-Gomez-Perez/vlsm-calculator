@@ -5,6 +5,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import com.vlsm.controlles.AppContext;
+
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -25,6 +27,8 @@ import javax.swing.JScrollPane;
 import java.awt.Toolkit;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Fr_Calculator extends JFrame {
 
@@ -50,7 +54,7 @@ public class Fr_Calculator extends JFrame {
 	private JTextField txf_netPrefix;
 	private Component horizontalStrut_3;
 	private JLabel lblNewLabel_3;
-	private JTextField textField;
+	private JTextField txf_SubnetsRequired;
 	private Component horizontalStrut_4;
 	private Component horizontalStrut_5;
 	private JButton btn_setIpAddress;
@@ -66,13 +70,16 @@ public class Fr_Calculator extends JFrame {
 	private JPanel panelSouth_buttons;
 	private JButton btn_ShowFullData;
 	private JButton btn_ClearAll;
-	private JButton btn_Calculate;
+	private JButton btn_Calculate;	
 	
 
 	/**
 	 * Create the frame.
 	 */
 	public Fr_Calculator() {
+		
+		
+		
 		setBackground(new Color(238, 232, 170));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Fr_Calculator.class.getResource("/com/vlsm/resources/5412-network-switch-icon-iconbunny.jpg")));
 		setTitle("VLSM Calculator");
@@ -166,14 +173,19 @@ public class Fr_Calculator extends JFrame {
 		horizontalStrut_4 = Box.createHorizontalStrut(5);
 		panelCenter_North_TextFields.add(horizontalStrut_4);
 		
-		textField = new JTextField();
-		panelCenter_North_TextFields.add(textField);
-		textField.setColumns(5);
+		txf_SubnetsRequired = new JTextField();
+		panelCenter_North_TextFields.add(txf_SubnetsRequired);
+		txf_SubnetsRequired.setColumns(5);
 		
 		horizontalStrut_5 = Box.createHorizontalStrut(10);
 		panelCenter_North_TextFields.add(horizontalStrut_5);
 		
 		btn_setIpAddress = new JButton("Set");
+		btn_setIpAddress.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				prepareHostTable();
+			}
+		});
 		btn_setIpAddress.setBackground(new Color(152, 251, 152));
 		panelCenter_North_TextFields.add(btn_setIpAddress);
 		
@@ -226,8 +238,39 @@ public class Fr_Calculator extends JFrame {
 		panelSouth_buttons.add(btn_ShowFullData);
 		
 		btn_ClearAll = new JButton("Clear");
+		btn_ClearAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clearData();
+			}
+		});
 		btn_ClearAll.setBackground(new Color(250, 128, 114));
 		panelSouth_buttons.add(btn_ClearAll);
 	}
-
+	
+	private void prepareHostTable() {
+		
+		int req;
+		
+		try {
+			req = Integer.parseInt(this.txf_SubnetsRequired.getText());
+			AppContext.hostController.prepareVlans(req).stream().forEach(o -> {
+				this.tableDataHostModel.addRow(o);
+			});
+			
+		}catch(Exception er) {
+			er.printStackTrace();
+		}
+	}
+	
+	private void clearData() {
+		
+		this.tableDataHostModel.getDataVector().removeAllElements();
+		this.tableDataHostRequired.updateUI();
+		this.txf_ipBaseAddress.setText("");
+		this.txf_netPrefix.setText("");
+		this.txf_SubnetsRequired.setText("");
+		this.txa_VLSMSchema.setText("");
+		
+	}
+	
 }
