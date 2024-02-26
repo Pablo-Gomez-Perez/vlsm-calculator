@@ -1,19 +1,27 @@
 package com.vlsm.models;
 
+import java.util.Objects;
+
 public class Host {
-	
+
 	private int idHost;
 	private String hostName;
 	private int hostQuantity;
-	
+
+	/**
+	 * 
+	 * @param idHost
+	 * @param hostName
+	 * @param hostQuantity
+	 */
 	public Host(int idHost, String hostName, int hostQuantity) {
 		this.idHost = idHost;
 		this.hostName = hostName;
 		this.hostQuantity = hostQuantity;
 	}
-	
+
 	public Host() {
-		
+
 	}
 
 	/**
@@ -59,10 +67,26 @@ public class Host {
 	}
 
 	@Override
-	public String toString() {
-		return "Host [idHost=" + idHost + ", hostName=" + hostName + ", hostQuantity=" + hostQuantity + "]";
+	public int hashCode() {
+		return Objects.hash(hostQuantity);
 	}
-	
-	
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Host)) {
+			return false;
+		}
+		Host other = (Host) obj;
+		return hostQuantity == other.hostQuantity;
+	}
+
+	@Override
+	public String toString() {
+		return "=====================\n" + "Hosts Data\n" + "-♦--♦--♦--♦--♦--♦--♦--♦--♦-\n" + "idHost: " + idHost + "\n"
+				+ "hostName: " + hostName + "\n" + "hostQuantity: " + hostQuantity + "\n" + "=====================\n";
+	}
+
 }

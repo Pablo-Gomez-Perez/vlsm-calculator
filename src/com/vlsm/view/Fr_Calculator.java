@@ -6,6 +6,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import com.vlsm.controlles.AppContext;
+import com.vlsm.models.CalculatorVLSM;
+import com.vlsm.models.Host;
+import com.vlsm.models.SubNet;
 
 import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
@@ -18,6 +21,7 @@ import java.awt.Font;
 import java.awt.FlowLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.EventQueue;
 
 import javax.swing.Box;
 import javax.swing.JTextField;
@@ -32,6 +36,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 public class Fr_Calculator extends JFrame {
 
@@ -74,6 +79,9 @@ public class Fr_Calculator extends JFrame {
 	private JButton btn_ShowFullData;
 	private JButton btn_ClearAll;
 	private JButton btn_Calculate;
+	private CalculatorVLSM calculator;
+	private List<Host> hosts;
+	private List<SubNet> subNets;
 
 	/**
 	 * Create the frame.
@@ -218,6 +226,11 @@ public class Fr_Calculator extends JFrame {
 		panelCenter_North_TextFields.add(btn_setIpAddress);
 
 		btn_Calculate = new JButton("Start");
+		btn_Calculate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				startCalculate();
+			}
+		});
 		btn_Calculate.setBackground(new Color(135, 206, 235));
 		panelCenter_North_TextFields.add(btn_Calculate);
 
@@ -262,6 +275,11 @@ public class Fr_Calculator extends JFrame {
 		contentPane.add(panelSouth_buttons, BorderLayout.SOUTH);
 
 		btn_ShowFullData = new JButton("Show Full Data");
+		btn_ShowFullData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				openFrFullNotatedData(calculator,hosts);
+			}
+		});
 		btn_ShowFullData.setBackground(new Color(135, 206, 235));
 		panelSouth_buttons.add(btn_ShowFullData);
 
@@ -274,8 +292,8 @@ public class Fr_Calculator extends JFrame {
 		btn_ClearAll.setBackground(new Color(250, 128, 114));
 		panelSouth_buttons.add(btn_ClearAll);
 
-		this.btn_Calculate.setEnabled(false);
-		this.btn_ShowFullData.setEnabled(false);
+		this.btn_Calculate.setEnabled(true);
+		this.btn_ShowFullData.setEnabled(true);
 
 	}
 
@@ -306,7 +324,7 @@ public class Fr_Calculator extends JFrame {
 			this.tableDataHostRequired.updateUI();
 			this.btn_Calculate.setEnabled(true);
 
-			AppContext.calculatorController.setVlsmData(this.txf_ipBaseAddress.getText(),
+			this.calculator = AppContext.calculatorController.setVlsmData(this.txf_ipBaseAddress.getText(),
 					Integer.parseInt(this.txf_netPrefix.getText()),
 					Integer.parseInt(this.txf_SubnetsRequired.getText()));
 
@@ -314,11 +332,30 @@ public class Fr_Calculator extends JFrame {
 			AppContext.hostController.prepareVlans(req).stream().forEach(o -> {
 				this.tableDataHostModel.addRow(o);
 			});
-
+						
+			
 		} catch (Exception er) {
 			er.printStackTrace();
 			JOptionPane.showMessageDialog(this, er.getMessage(), er.toString(), JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	private void startCalculate() {
+		
+		try {
+			
+			this.hosts = AppContext.hostController.getHostsData(this.tableDataHostModel.getDataVector());			
+			this.hosts.forEach(System.out::println);
+			
+			this.subNets = AppContext.subnetController.listVlsmSchema(this.hosts, this.calculator);
+			//this.subNets.forEach(System.out::println);
+			
+		}catch(Exception er) {
+			er.printStackTrace();
+			JOptionPane.showMessageDialog(this, er.getMessage(), er.toString(), JOptionPane.ERROR_MESSAGE);
+		}
+		
+		
 	}
 
 	private void clearData() {
@@ -329,9 +366,25 @@ public class Fr_Calculator extends JFrame {
 		this.txf_netPrefix.setText("");
 		this.txf_SubnetsRequired.setText("");
 		this.txa_VLSMSchema.setText("");
-		this.btn_Calculate.setEnabled(false);
-		this.btn_ShowFullData.setEnabled(false);
+		this.btn_Calculate.setEnabled(true);
+		this.btn_ShowFullData.setEnabled(true);
 
+	}
+	
+	private void openFrFullNotatedData(CalculatorVLSM calculator, List<Host> hosts) {
+		Component cm = this;
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Fr_FullNotatedData frame = new Fr_FullNotatedData(calculator, hosts);
+					frame.setLocationRelativeTo(cm);
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 
 }

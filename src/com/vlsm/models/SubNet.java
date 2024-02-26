@@ -240,17 +240,16 @@ public class SubNet {
 	public void setBroadcastDirection(String broadcastDirection) {
 		this.broadcastDirection = broadcastDirection;
 	}
-	
-	
+
 	@Override
 	public String toString() {
-		String data = "";
-		
-		data = "\n===========================\n"
-				+ "Id: " + this.subNetId + "\n"
-				+ "Name: ";
-		
-		return data;
+		return "SubNet [subNetId=" + subNetId + ", subNetName=" + subNetName + ", hostRequired=" + hostRequired
+				+ ", hostAviable=" + hostAviable + ", netAddress=" + netAddress + ", prefix=" + prefix + ", mask="
+				+ mask + ", firstAviable=" + firstAviable + ", lastAviable=" + lastAviable + ", broadcastDirection="
+				+ broadcastDirection + "]";
 	}
+	
+	
+	
 	
 }

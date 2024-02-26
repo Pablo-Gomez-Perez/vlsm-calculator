@@ -8,6 +8,7 @@ public class CalculatorVLSM {
 	private String ipBase;
 	private int prefix;
 	private int hostRequired;
+	private char ipClase;
 
 	/**
 	 * @param ipBase
@@ -62,8 +63,26 @@ public class CalculatorVLSM {
 	/**
 	 * @param prefix the prefix to set
 	 */
-	public void setPrefix(int prefix) {
+	public void setPrefix(int prefix) throws Exception{
+		
+		
+		if(this.ipClase == 'A' && (prefix < 8 || prefix > 30)) {
+			this.prefix = -1;
+			throw new Exception("Invalid prefix value for this Ip Clase");
+		}
+		
+		if(this.ipClase == 'B' && (prefix < 16 || prefix > 30)) {
+			this.prefix = -1;
+			throw new Exception("Invalid prefix value for this Ip Clase");
+		}
+		
+		if(this.ipClase == 'C' && (prefix < 24 || prefix > 30)) {
+			this.prefix = -1;
+			throw new Exception("Invalid prefix value for this Ip Clase");
+		}
+		
 		this.prefix = prefix;
+		
 	}
 
 	/**
@@ -79,10 +98,25 @@ public class CalculatorVLSM {
 	public void setHostRequired(int hostRequired) {
 		this.hostRequired = hostRequired;
 	}
+	
+	public void setIpClase(char ipClase) {
+		this.ipClase = ipClase;
+	}
+	
+	public char getIpClase() {
+		return this.ipClase;
+	}
 
 	@Override
 	public String toString() {
-		return "CalculatorVLSM [ipBase=" + ipBase + ", prefix=" + prefix + ", hostRequired=" + hostRequired + "]";
+		return "=====================\n"
+				+ "CalculatorVLSM\n"
+				+ "-♦--♦--♦--♦--♦--♦--♦--♦--♦-\n"
+				+ "ipBase: " + ipBase +"\n"
+				+ "prefix: " + prefix + "\n"
+				+ "ipClase: " + ipClase + "\n"
+				+ "hostRequired: " + hostRequired + "\n"
+				+ "=====================\n";
 	}
 
 }
