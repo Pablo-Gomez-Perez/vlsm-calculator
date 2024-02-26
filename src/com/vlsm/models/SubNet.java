@@ -5,7 +5,7 @@ public class SubNet {
 	private int subNetId;
 	private String subNetName;
 	private int hostRequired;
-	private int hostAviable;
+	private int hostAviable;	
 	private String netAddress;
 	private int prefix;
 	private String mask;
@@ -34,9 +34,40 @@ public class SubNet {
 			this.snt.setNetAddress(netAddress);
 			return this;
 		}
+		
+		public Builder prefix(int prefix) {
+			this.snt.setPrefix(prefix);
+			return this;
+		}
+		
+		public Builder mask(String mask) {
+			this.snt.setMask(mask);
+			return this;
+		}
+		
+		public Builder firstAviable(String firstAviable) {
+			this.snt.setFirstAviable(firstAviable);
+			return this;			
+		}
+		
+		public Builder lasAviable(String lasAviable) {
+			this.snt.setLastAviable(lasAviable);
+			return this;
+		}
+		
+		public Builder broadcastDirection(String broadcastDirection) {
+			this.snt.setBroadcastDirection(broadcastDirection);
+			return this;
+		}
+		
+		public SubNet build() {
+			return this.snt;
+		}
 	}
 	
-	
+	public static Builder builder(int subNetId, String subNetName) {
+		return new Builder(subNetId, subNetName);
+	}
 	
 	/**
 	 * @param subNetId
