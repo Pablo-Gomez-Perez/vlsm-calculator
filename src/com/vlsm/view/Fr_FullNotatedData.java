@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.vlsm.models.CalculatorVLSM;
 import com.vlsm.models.Host;
+import com.vlsm.models.SubNet;
 
 import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
@@ -22,6 +23,7 @@ public class Fr_FullNotatedData extends JFrame {
 	private JTextArea txa_FullData;
 	private CalculatorVLSM calculator;
 	private List<Host> hosts;
+	private List<SubNet> subNets;
 	/*
 	 * 
 	 * */
@@ -29,10 +31,11 @@ public class Fr_FullNotatedData extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Fr_FullNotatedData(CalculatorVLSM calculator, List<Host> hosts) {
+	public Fr_FullNotatedData(CalculatorVLSM calculator, List<Host> hosts, List<SubNet> subNets) {
 		
 		this.calculator = calculator;
 		this.hosts = hosts;
+		this.subNets = subNets;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 554, 467);

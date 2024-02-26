@@ -277,7 +277,7 @@ public class Fr_Calculator extends JFrame {
 		btn_ShowFullData = new JButton("Show Full Data");
 		btn_ShowFullData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				openFrFullNotatedData(calculator,hosts);
+				openFrFullNotatedData(calculator,hosts, subNets);
 			}
 		});
 		btn_ShowFullData.setBackground(new Color(135, 206, 235));
@@ -349,6 +349,7 @@ public class Fr_Calculator extends JFrame {
 			
 			this.subNets = AppContext.subnetController.listVlsmSchema(this.hosts, this.calculator);
 			//this.subNets.forEach(System.out::println);
+			this.writeData();
 			
 		}catch(Exception er) {
 			er.printStackTrace();
@@ -357,7 +358,13 @@ public class Fr_Calculator extends JFrame {
 		
 		
 	}
-
+	
+	private void writeData() {
+		this.subNets.forEach(sn -> {
+			this.txa_VLSMSchema.append(sn.toString() + "\n");
+		});
+	}
+	
 	private void clearData() {
 
 		this.tableDataHostModel.getDataVector().removeAllElements();
@@ -371,12 +378,12 @@ public class Fr_Calculator extends JFrame {
 
 	}
 	
-	private void openFrFullNotatedData(CalculatorVLSM calculator, List<Host> hosts) {
+	private void openFrFullNotatedData(CalculatorVLSM calculator, List<Host> hosts, List<SubNet> subNets) {
 		Component cm = this;
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Fr_FullNotatedData frame = new Fr_FullNotatedData(calculator, hosts);
+					Fr_FullNotatedData frame = new Fr_FullNotatedData(calculator, hosts, subNets);
 					frame.setLocationRelativeTo(cm);
 					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					frame.setVisible(true);
