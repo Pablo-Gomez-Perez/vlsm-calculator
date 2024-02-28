@@ -345,7 +345,6 @@ public class Fr_Calculator extends JFrame {
 		try {
 			
 			this.hosts = AppContext.hostController.getHostsData(this.tableDataHostModel.getDataVector());			
-			this.hosts.forEach(System.out::println);
 			
 			this.subNets = AppContext.subnetController.listVlsmSchema(this.hosts, this.calculator);
 			//this.subNets.forEach(System.out::println);
