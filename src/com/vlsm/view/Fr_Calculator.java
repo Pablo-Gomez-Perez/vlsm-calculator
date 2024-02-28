@@ -344,11 +344,17 @@ public class Fr_Calculator extends JFrame {
 		
 		try {
 			
-			this.hosts = AppContext.hostController.getHostsData(this.tableDataHostModel.getDataVector());			
-			
-			this.subNets = AppContext.subnetController.listVlsmSchema(this.hosts, this.calculator);
-			//this.subNets.forEach(System.out::println);
-			this.writeData();
+			new Thread(() -> {
+				try {
+					this.hosts = AppContext.hostController.getHostsData(this.tableDataHostModel.getDataVector());			
+					
+					this.subNets = AppContext.subnetController.listVlsmSchema(this.hosts, this.calculator);
+					//this.subNets.forEach(System.out::println);
+					this.writeData();
+				}catch(Exception er) {
+					er.printStackTrace();
+				}
+			}).run();
 			
 		}catch(Exception er) {
 			er.printStackTrace();
